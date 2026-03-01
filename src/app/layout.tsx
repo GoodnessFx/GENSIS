@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Syncopate } from "next/font/google";
+import { Space_Grotesk, Syncopate, Syne } from "next/font/google";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -11,6 +11,12 @@ const syncopate = Syncopate({
   variable: "--font-syncopate",
   subsets: ["latin"],
   weight: ["400", "700"],
+});
+
+const syne = Syne({
+  variable: "--font-syne",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -26,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${spaceGrotesk.variable} ${syncopate.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${syncopate.variable} ${syne.variable} antialiased`}
       >
         {children}
       </body>

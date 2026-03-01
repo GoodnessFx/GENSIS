@@ -21,9 +21,12 @@ export default function Home() {
         {!isStarted ? <HeroOverlay /> : <ExperienceOverlay />}
       </ErrorBoundary>
 
-      {/* Film Grain Overlay */}
-      <div className="pointer-events-none absolute inset-0 z-50 opacity-[0.05] mix-blend-overlay">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat opacity-20"></div>
+      {/* Cinematic Overlays */}
+      <div className="pointer-events-none absolute inset-0 z-50 overflow-hidden">
+        {/* Subtle Vignette */}
+        <div className="absolute inset-0 shadow-[inset_0_0_200px_rgba(0,0,0,0.8)]" />
+        {/* Animated Grain */}
+        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat animate-grain" />
       </div>
     </main>
   );

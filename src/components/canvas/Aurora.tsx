@@ -19,21 +19,24 @@ const fragmentShader = `
   varying vec2 vUv;
 
   void main() {
-    // Center-based gradient
-    float dist = distance(vUv, vec2(0.5, 0.5));
-    float strength = 1.0 - dist;
-    strength = pow(strength, 3.0);
-
-    // Aurora wave logic
-    float wave = sin(vUv.x * 10.0 + uTime) * 0.1;
-    wave += sin(vUv.x * 20.0 - uTime * 0.5) * 0.05;
-
-    float alpha = strength * (0.2 + wave);
+    // Advanced aurora math
+    vec2 uv = vUv;
+    float time = uTime * 0.5;
     
-    // Ensure alpha is within bounds
-    alpha = clamp(alpha, 0.0, 1.0);
+    float noise = sin(uv.x * 12.0 + time) * 0.1;
+    noise += sin(uv.x * 24.0 - time * 0.8) * 0.05;
+    noise += sin(uv.y * 8.0 + time * 1.2) * 0.02;
+
+    float gradient = 1.0 - distance(uv.y, 0.5 + noise);
+    gradient = pow(gradient, 4.0);
+
+    float flow = sin(uv.x * 10.0 + uv.y * 5.0 + time) * 0.5 + 0.5;
+    float alpha = gradient * flow * 0.6;
     
-    gl_FragColor = vec4(uColor, alpha);
+    vec3 color = mix(uColor, vec3(0.0, 0.8, 1.0), flow * 0.5);
+    color += vec3(0.1, 0.0, 0.2) * (1.0 - flow);
+    
+    gl_FragColor = vec4(color, alpha * clamp(sin(time * 0.2) * 0.5 + 0.5, 0.4, 1.0));
   }
 `;
 

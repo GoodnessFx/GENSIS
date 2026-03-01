@@ -55,8 +55,7 @@ const CodeScroll = ({ height, width }: { height: number; width: number }) => {
           position={[0, -i * 0.4, 0]}
           fontSize={0.2}
           color="#00ff88"
-          opacity={0.5}
-          transparent
+          fillOpacity={0.5}
           maxWidth={width * 0.8}
           anchorX="center"
           font={fontUrl}

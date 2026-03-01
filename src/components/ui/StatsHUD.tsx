@@ -23,17 +23,17 @@ export const StatsHUD = () => {
   }, [currentRepo]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-30 font-sans">
+    <div className="fixed inset-0 pointer-events-none z-30 font-accent">
       {/* Top Left: Date */}
-      <div className="absolute top-12 left-12">
+      <div className="absolute top-16 left-16">
         <motion.div 
           key={dateString}
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-1"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="space-y-2"
         >
-          <span className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-bold">Timeline Archive</span>
-          <h2 className="text-2xl text-white font-light tracking-tight">{dateString}</h2>
+          <span className="text-[11px] uppercase tracking-[0.6em] text-white/20 font-bold block">Temporal Log</span>
+          <h2 className="text-4xl text-white font-extralight tracking-tighter leading-none glow-text">{dateString}</h2>
         </motion.div>
       </div>
 
@@ -43,13 +43,13 @@ export const StatsHUD = () => {
           {currentRepo && (
             <motion.div
               key={currentRepo.id}
-              initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
+              initial={{ opacity: 0, scale: 0.8, filter: 'blur(20px)' }}
               animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
-              transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+              exit={{ opacity: 0, scale: 1.2, filter: 'blur(40px)' }}
+              transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
               className="text-center"
             >
-              <h3 className="text-5xl md:text-7xl font-bold tracking-tighter text-white/10 mix-blend-overlay uppercase">
+              <h3 className="text-[8rem] md:text-[12rem] font-bold tracking-[-0.05em] text-white/5 mix-blend-overlay uppercase leading-none font-accent italic">
                 {currentRepo.name}
               </h3>
             </motion.div>
@@ -58,19 +58,19 @@ export const StatsHUD = () => {
       </div>
 
       {/* Bottom Right: Milestones */}
-      <div className="absolute bottom-32 right-12 text-right">
-        <div className="space-y-4">
+      <div className="absolute bottom-40 right-16 text-right">
+        <div className="space-y-6">
           <AnimatePresence>
             {milestones.map((m, i) => (
               <motion.div
                 key={m + i}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-lg"
+                initial={{ opacity: 0, x: 40, scale: 0.9 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: -40, scale: 1.1 }}
+                className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 px-8 py-4 rounded-full shadow-[0_0_40px_rgba(0,0,0,0.5)]"
               >
-                <span className="text-[10px] uppercase tracking-widest text-green-400 font-bold block mb-1">Milestone Reached</span>
-                <p className="text-sm text-white font-medium">{m}</p>
+                <span className="text-[9px] uppercase tracking-[0.4em] text-cyan-400/60 font-bold block mb-1">Archive Milestone</span>
+                <p className="text-base text-white/90 font-light tracking-wide">{m}</p>
               </motion.div>
             ))}
           </AnimatePresence>

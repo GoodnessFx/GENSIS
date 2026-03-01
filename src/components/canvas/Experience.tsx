@@ -2,7 +2,7 @@
 
 import { Canvas } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
-import { Bloom, Noise, Vignette, ChromaticAberration, EffectComposer } from '@react-three/postprocessing';
+import { Bloom, Vignette, ChromaticAberration, EffectComposer } from '@react-three/postprocessing';
 import { Suspense, useMemo, useEffect } from 'react';
 import * as THREE from 'three';
 import { useExperienceStore } from '@/store/useExperienceStore';
@@ -55,10 +55,17 @@ const Scene = () => {
       <CinematicCamera />
 
       {/* Post Processing */}
-      <EffectComposer disableNormalPass>
-        <Bloom luminanceThreshold={1} intensity={1.0} mipmapBlur />
-        <ChromaticAberration offset={new THREE.Vector2(0.001, 0.001)} />
-        <Vignette eskil={false} offset={0.1} darkness={1.1} />
+      <EffectComposer>
+        <Bloom 
+          luminanceThreshold={1} 
+          intensity={1.5} 
+          mipmapBlur 
+          radius={0.4}
+        />
+        <ChromaticAberration 
+          offset={new THREE.Vector2(0.002, 0.002)} 
+        />
+        <Vignette eskil={false} offset={0.3} darkness={0.9} />
       </EffectComposer>
     </>
   );

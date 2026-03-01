@@ -11,6 +11,7 @@
   --font-sans: var(--font-space-grotesk);
   --font-mono: var(--font-geist-mono);
   --font-title: var(--font-syncopate);
+  --font-accent: var(--font-syne);
 }
 
 .font-title {
@@ -23,9 +24,46 @@
   font-family: var(--font-space-grotesk), sans-serif;
 }
 
+.font-accent {
+  font-family: var(--font-syne), sans-serif;
+}
+
 .professional-spacing {
   word-spacing: 0.4em;
   letter-spacing: 0.1em;
+}
+
+.glow-text {
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+.glow-button {
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.15);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glow-button:hover {
+  box-shadow: 0 0 70px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px) scale(1.02);
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -5%); }
+  20% { transform: translate(-10%, 5%); }
+  30% { transform: translate(5%, -10%); }
+  40% { transform: translate(-5%, 15%); }
+  50% { transform: translate(-10%, 5%); }
+  60% { transform: translate(15%, 0); }
+  70% { transform: translate(0, 10%); }
+  80% { transform: translate(-15%, 0); }
+  90% { transform: translate(10%, 5%); }
+}
+
+.animate-grain {
+  animation: grain 8s steps(10) infinite;
+  width: 200%;
+  height: 200%;
 }
 
 * {
