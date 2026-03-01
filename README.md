@@ -25,12 +25,13 @@
 - **Stats Layer**: Minimalist floating text for dates, repo names, and milestone callouts.
 - **Ending Sequence**: A dramatic camera pullback revealing the entire world, followed by a global stats summary and the final prompt: *Keep building.*
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack & Architecture
 
 - **Frontend**: Next.js (App Router), Three.js, React Three Fiber, GSAP, Framer Motion, Tone.js, Tailwind CSS.
-- **State Management**: Zustand.
-- **Animations**: GSAP for cinematic camera paths and Framer Motion for UI overlays.
-- **Post-processing**: Bloom, Chromatic Aberration, Depth of Field, God Rays, Film Grain.
+- **State Management**: Zustand (Centralized experience state).
+- **Architecture**: Decoupled UI overlays from the 3D Canvas engine for high performance.
+
+*Note: The architecture diagram in previous versions included high-level infrastructure (Redis/Bull) which is part of the future scalable backend; currently, the app runs as a performant standalone Next.js application.*
 
 ## 🚀 Getting Started
 
@@ -55,12 +56,14 @@
    npm run dev
    ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 🎨 Monetization (Pro Concept)
+
+## 🎨 Monetization (Pro Concept - WIP)
 - **Free**: 2-minute playback, watermarked export.
 - **Pro ($4/month)**: Full playback, 4K wallpaper/video export, no watermark.
 - **Teams ($20/month)**: Org-wide team journey visualization.
+
+*Note: These features are part of the long-term vision and are currently in active development.*
 
 ---
 
