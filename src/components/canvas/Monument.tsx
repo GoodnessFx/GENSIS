@@ -39,6 +39,8 @@ const CodeScroll = ({ height, width }: { height: number; width: number }) => {
     '});',
   ], []);
 
+  const fontUrl = "https://fonts.gstatic.com/s/robotomono/v22/L0tkDFo6GF1D6C1KnS7dfRLXv5b2Eg.ttf";
+
   useFrame((state) => {
     if (textRef.current) {
       textRef.current.position.y = (state.clock.getElapsedTime() % 10) - 5;
@@ -57,7 +59,7 @@ const CodeScroll = ({ height, width }: { height: number; width: number }) => {
           transparent
           maxWidth={width * 0.8}
           anchorX="center"
-          font="https://fonts.gstatic.com/s/robotomono/v22/L0tkDFo6GF1D6C1KnS7dfRLXv5b2Eg.ttf"
+          font={fontUrl}
         >
           {line}
         </Text>
@@ -80,19 +82,30 @@ export const Monument = ({ repo, position }: MonumentProps) => {
   const isBuilding = progress >= myProgress && progress < (myIndex + 1) / totalRepos;
   const isBuilt = progress >= (myIndex + 1) / totalRepos;
   
-  // Milestone tracking
-  useEffect(() => {
-    if (isBuilding) {
-      if (myIndex === 0) addMilestone(`First commit — ${repo.date}`);
-      if (repo.stars >= 1000) addMilestone(`Major Milestone: ${repo.name} hit ${repo.stars} stars`);
-      if (repo.commits >= 1000) addMilestone(`Legendary activity: 1,000 commits in ${repo.name}`);
-    }
-  }, [isBuilding, myIndex, repo.name, repo.stars, repo.commits, addMilestone]);
   // Calculate scale based on stars
   const height = useMemo(() => Math.max(2, Math.log10(repo.stars + 1) * 5), [repo.stars]);
   const width = useMemo(() => Math.max(1.5, Math.log10(repo.commits + 1) * 2), [repo.commits]);
   
   const [scale, setScale] = useState(0);
+  const milestoneAdded = useRef(false);
+
+  // Milestone tracking
+  useEffect(() => {
+    if (isBuilding && !milestoneAdded.current) {
+      if (myIndex === 0) {
+        addMilestone(`First commit — ${repo.date}`);
+        milestoneAdded.current = true;
+      }
+      if (repo.stars >= 1000) {
+        addMilestone(`Major Milestone: ${repo.name} hit ${repo.stars} stars`);
+        milestoneAdded.current = true;
+      }
+      if (repo.commits >= 1000) {
+        addMilestone(`Legendary activity: 1,000 commits in ${repo.name}`);
+        milestoneAdded.current = true;
+      }
+    }
+  }, [isBuilding, myIndex, repo.name, repo.stars, repo.commits, addMilestone, repo.date]);
 
   useFrame((state, delta) => {
     if (isBuilding || isBuilt) {
@@ -107,21 +120,28 @@ export const Monument = ({ repo, position }: MonumentProps) => {
     const lang = repo.language?.toLowerCase() || 'other';
     switch (lang) {
       case 'javascript':
+      case 'js':
         return { color: '#f7df1e', material: 'glass', type: 'skyscraper' };
       case 'typescript':
+      case 'ts':
         return { color: '#3178c6', material: 'chrome', type: 'tower' };
       case 'python':
+      case 'py':
         return { color: '#3776ab', material: 'stone', type: 'temple' };
       case 'rust':
+      case 'rs':
         return { color: '#dea584', material: 'iron', type: 'fortress' };
       case 'go':
+      case 'golang':
         return { color: '#00add8', material: 'white', type: 'obelisk' };
       case 'solidity':
+      case 'sol':
         return { color: '#363636', material: 'crystal', type: 'spire' };
       case 'cpp':
       case 'c++':
         return { color: '#00599c', material: 'ancient', type: 'colosseum' };
       case 'ruby':
+      case 'rb':
         return { color: '#cc342d', material: 'sandstone', type: 'pyramid' };
       default:
         return { color: '#ffffff', material: 'default', type: 'monolith' };
@@ -192,6 +212,7 @@ export const Monument = ({ repo, position }: MonumentProps) => {
           anchorX="center"
           anchorY="middle"
           font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfMZhrib2Bg-4.ttf"
+          visible={isBuilt || isBuilding}
         >
           {repo.name.toUpperCase()}
         </Text>
@@ -199,13 +220,25 @@ export const Monument = ({ repo, position }: MonumentProps) => {
       
       {/* Glow at base - only when active or built */}
       {(isBuilding || isBuilt) && (
-        <pointLight 
-          position={[0, 0.5, 0]} 
-          color={languageStyle.color} 
-          intensity={repo.stars > 0 ? 15 : 2} 
-          distance={20} 
-          decay={2}
-        />
+        <>
+          <pointLight 
+            position={[0, 0.5, 0]} 
+            color={languageStyle.color} 
+            intensity={repo.stars > 0 ? 15 : 2} 
+            distance={20} 
+            decay={2}
+          />
+          {/* Base Glow Mesh for visual depth */}
+          <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <circleGeometry args={[width * 1.5, 32]} />
+            <meshBasicMaterial 
+              color={languageStyle.color} 
+              transparent 
+              opacity={isBuilding ? 0.3 : 0.1} 
+              blending={THREE.AdditiveBlending} 
+            />
+          </mesh>
+        </>
       )}
     </group>
   );

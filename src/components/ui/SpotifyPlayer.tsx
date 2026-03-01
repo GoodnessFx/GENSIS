@@ -1,18 +1,27 @@
 'use client';
 
 import { useExperienceStore } from '@/store/useExperienceStore';
-import { Music, Volume2 } from 'lucide-react';
-import { useMemo } from 'react';
-import { getMockTrack } from '@/lib/spotifyMock';
+import { Music, Volume2, Radio } from 'lucide-react';
+import { useMemo, useEffect, useState } from 'react';
+import { getTrackForRepo, SpotifyTrack } from '@/lib/spotifyService';
 
 export const SpotifyPlayer = () => {
   const { githubData, progress, isStarted } = useExperienceStore();
+  const [currentTrack, setCurrentTrack] = useState<SpotifyTrack | null>(null);
+  const [isLive, setIsLive] = useState(false);
 
-  const currentTrack = useMemo(() => {
-    if (!githubData || !isStarted) return null;
+  useEffect(() => {
+    if (!githubData || !isStarted) return;
+    
     const index = Math.floor(progress * githubData.length);
     const repo = githubData[Math.min(index, githubData.length - 1)];
-    return getMockTrack(repo);
+    
+    // In a production app, we would cache these to avoid flickering
+    getTrackForRepo(repo).then(track => {
+      setCurrentTrack(track);
+      // If the track is from the repo era, we consider it "Live" (mock logic)
+      setIsLive(true); 
+    });
   }, [githubData, progress, isStarted]);
 
   if (!currentTrack) return null;
@@ -21,7 +30,7 @@ export const SpotifyPlayer = () => {
     <div className="fixed top-8 right-8 z-20">
       <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex items-center gap-4 animate-in slide-in-from-right duration-500">
         <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center relative overflow-hidden group">
-          <Music className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+          {isLive ? <Radio className="w-6 h-6 text-green-500" /> : <Music className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />}
           {/* Simulated Visualizer Bars */}
           <div className="absolute bottom-0 left-0 w-full flex items-end justify-center gap-0.5 px-1 h-4">
             {[1, 2, 3, 4].map((i) => (
@@ -43,13 +52,13 @@ export const SpotifyPlayer = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
             </span>
-            Now Playing
+            {isLive ? 'Live Sync' : 'Liked Songs Fallback'}
           </div>
           <h3 className="text-white font-medium text-sm leading-none truncate max-w-[150px]">
             {currentTrack.name}
           </h3>
           <p className="text-white/40 text-xs font-light">
-            {currentTrack.genre} • {currentTrack.bpm} BPM
+            {currentTrack.artist} • {currentTrack.bpm} BPM
           </p>
         </div>
 
