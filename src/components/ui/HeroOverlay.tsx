@@ -12,16 +12,16 @@ export const HeroOverlay = () => {
 
   const handleConnectGithub = async () => {
     setIsConnectingGithub(true);
-    // Simulate OAuth flow
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Simulate real-time retrieval with progress
+    await new Promise(resolve => setTimeout(resolve, 2500));
     setGithubUser('GoodnessFx');
     setIsConnectingGithub(false);
   };
 
   const handleConnectSpotify = async () => {
     setIsConnectingSpotify(true);
-    // Simulate OAuth flow
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Simulate real-time auth and liked songs fetch
+    await new Promise(resolve => setTimeout(resolve, 3000));
     setSpotifyUser('UserAccount');
     setIsConnectingSpotify(false);
   };
@@ -29,109 +29,116 @@ export const HeroOverlay = () => {
   const canInitiate = githubUser && spotifyUser;
 
   return (
-    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/80 backdrop-blur-2xl transition-all duration-1000 overflow-hidden">
-      <div className="max-w-6xl w-full px-12 text-center space-y-24 animate-in fade-in zoom-in duration-1500">
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/90 backdrop-blur-[100px] transition-all duration-1500 overflow-hidden">
+      {/* Background Ambience */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vh] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_60%)] opacity-50" />
+      </div>
+
+      <div className="max-w-7xl w-full px-12 text-center space-y-32 z-10">
         
         {/* Cinematic Title Section */}
-        <div className="space-y-6">
-          <motion.span 
-            initial={{ opacity: 0, y: 20 }}
+        <div className="space-y-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-[10px] font-title tracking-[1em] text-white/30 uppercase block"
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-4"
           >
-            A Living Archive of Your Creation
-          </motion.span>
-          <motion.h1 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[12rem] font-bold tracking-[-0.04em] text-white sm:text-[14rem] md:text-[18rem] font-accent leading-none glow-text select-none"
-          >
-            GENESIS
-          </motion.h1>
+            <span className="text-[11px] font-title tracking-[1.2em] text-white/20 uppercase block">A Visual Narrative of Creation</span>
+            <h1 className="text-[14rem] md:text-[20rem] font-bold tracking-[-0.06em] text-white font-accent leading-[0.85] glow-text select-none">
+              GENESIS
+            </h1>
+          </motion.div>
+          
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="text-2xl text-zinc-500 font-light tracking-widest max-w-3xl mx-auto leading-relaxed font-sans italic"
+            transition={{ delay: 0.6, duration: 1.5 }}
+            className="text-2xl text-zinc-600 font-light tracking-[0.2em] max-w-4xl mx-auto leading-relaxed font-sans uppercase"
           >
-            "Every line of code tells a story. Every beat defines an era."
+            Every line of code tells a story. Every beat defines an era.
           </motion.p>
         </div>
         
-        {/* Connection Phase */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+        {/* Connection Phase - Perfectly Aligned Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-5xl mx-auto items-stretch">
           {/* GitHub Connection */}
           <motion.div 
-            whileHover={{ y: -5 }}
-            className={`p-10 rounded-[2.5rem] border transition-all duration-700 flex flex-col items-center gap-6 ${githubUser ? 'bg-white/5 border-green-500/30' : 'bg-white/[0.02] border-white/5'}`}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8, duration: 1 }}
+            className={`group relative p-12 rounded-[3rem] border transition-all duration-1000 flex flex-col justify-between gap-10 ${githubUser ? 'bg-white/[0.04] border-white/20' : 'bg-white/[0.01] border-white/5 hover:border-white/10'}`}
           >
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors duration-500 ${githubUser ? 'bg-green-500 text-black' : 'bg-white/5 text-white'}`}>
-              {githubUser ? <CheckCircle2 className="w-8 h-8" /> : <Github className="w-8 h-8" />}
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-xl font-title tracking-[0.2em] uppercase text-white">Source Archive</h3>
-              <p className="text-sm text-zinc-500 font-sans tracking-wide">Sync your GitHub repositories to materialize your monuments.</p>
+            <div className="space-y-8 text-left">
+              <div className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-1000 ${githubUser ? 'bg-white text-black' : 'bg-white/5 text-white/40'}`}>
+                {githubUser ? <CheckCircle2 className="w-10 h-10" /> : <Github className="w-10 h-10" />}
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-2xl font-title tracking-[0.3em] uppercase text-white leading-none">Source Archive</h3>
+                <p className="text-sm text-zinc-500 font-sans tracking-widest leading-relaxed uppercase opacity-60">Synchronize your repository history to architect the timeline.</p>
+              </div>
             </div>
             <button 
               onClick={handleConnectGithub}
               disabled={!!githubUser || isConnectingGithub}
-              className={`w-full py-4 rounded-full font-title text-[10px] tracking-[0.3em] uppercase transition-all ${githubUser ? 'text-green-500 cursor-default' : 'bg-white text-black hover:scale-105 active:scale-95'}`}
+              className={`w-full py-6 rounded-full font-title text-[10px] tracking-[0.4em] uppercase transition-all duration-700 ${githubUser ? 'text-white/40 border border-white/10 cursor-default' : 'bg-white text-black hover:scale-[1.02] active:scale-98 shadow-2xl shadow-white/5'}`}
             >
-              {isConnectingGithub ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : (githubUser ? 'Connected' : 'Link GitHub')}
+              {isConnectingGithub ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : (githubUser ? 'ARCHIVE LINKED' : 'LINK REPOSITORIES')}
             </button>
           </motion.div>
 
           {/* Spotify Connection */}
           <motion.div 
-            whileHover={{ y: -5 }}
-            className={`p-10 rounded-[2.5rem] border transition-all duration-700 flex flex-col items-center gap-6 ${spotifyUser ? 'bg-white/5 border-green-500/30' : 'bg-white/[0.02] border-white/5'}`}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8, duration: 1 }}
+            className={`group relative p-12 rounded-[3rem] border transition-all duration-1000 flex flex-col justify-between gap-10 ${spotifyUser ? 'bg-white/[0.04] border-white/20' : 'bg-white/[0.01] border-white/5 hover:border-white/10'}`}
           >
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors duration-500 ${spotifyUser ? 'bg-green-500 text-black' : 'bg-white/5 text-white'}`}>
-              {spotifyUser ? <CheckCircle2 className="w-8 h-8" /> : <Music className="w-8 h-8" />}
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-xl font-title tracking-[0.2em] uppercase text-white">Audio Mapping</h3>
-              <p className="text-sm text-zinc-500 font-sans tracking-wide">Connect Spotify to weave your personal soundtrack into the timeline.</p>
+            <div className="space-y-8 text-left">
+              <div className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-1000 ${spotifyUser ? 'bg-white text-black' : 'bg-white/5 text-white/40'}`}>
+                {spotifyUser ? <CheckCircle2 className="w-10 h-10" /> : <Music className="w-10 h-10" />}
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-2xl font-title tracking-[0.3em] uppercase text-white leading-none">Audio Mapping</h3>
+                <p className="text-sm text-zinc-500 font-sans tracking-widest leading-relaxed uppercase opacity-60">Authorize audio streaming to score your development journey.</p>
+              </div>
             </div>
             <button 
               onClick={handleConnectSpotify}
               disabled={!!spotifyUser || isConnectingSpotify}
-              className={`w-full py-4 rounded-full font-title text-[10px] tracking-[0.3em] uppercase transition-all ${spotifyUser ? 'text-green-500 cursor-default' : 'bg-white text-black hover:scale-105 active:scale-95'}`}
+              className={`w-full py-6 rounded-full font-title text-[10px] tracking-[0.4em] uppercase transition-all duration-700 ${spotifyUser ? 'text-white/40 border border-white/10 cursor-default' : 'bg-white text-black hover:scale-[1.02] active:scale-98 shadow-2xl shadow-white/5'}`}
             >
-              {isConnectingSpotify ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : (spotifyUser ? 'Connected' : 'Link Spotify')}
+              {isConnectingSpotify ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : (spotifyUser ? 'AUDIO LINKED' : 'LINK SOUNDTRACK')}
             </button>
           </motion.div>
         </div>
 
-        {/* Initiation Section */}
-        <AnimatePresence>
-          {canInitiate && (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="pt-12"
-            >
-              <button 
-                onClick={() => setStarted(true)}
-                className="glow-button group relative flex items-center justify-center gap-8 bg-white text-black px-24 py-10 rounded-full font-title font-bold text-base tracking-[0.5em] overflow-hidden"
+        {/* Initiation Section - Play Your Genesis */}
+        <div className="h-40 flex items-center justify-center">
+          <AnimatePresence>
+            {canInitiate && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8, filter: 'blur(20px)' }}
+                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, scale: 1.1, filter: 'blur(40px)' }}
+                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-10"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-zinc-200 to-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                <Play className="w-8 h-8 fill-current shrink-0 group-hover:scale-110 transition-transform relative z-10" />
-                <span className="relative z-10">INITIATE SEQUENCE</span>
-              </button>
-              <p className="mt-8 text-[10px] font-title tracking-[0.4em] text-white/20 uppercase">Warning: Sensory overload may occur</p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <button 
+                  onClick={() => setStarted(true)}
+                  className="glow-button group relative flex items-center justify-center gap-12 bg-white text-black px-32 py-12 rounded-full font-title font-bold text-lg tracking-[0.8em] overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-zinc-200 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                  <Play className="w-10 h-10 fill-current shrink-0 group-hover:scale-110 transition-transform duration-700 relative z-10" />
+                  <span className="relative z-10">PLAY YOUR GENESIS</span>
+                </button>
+                <p className="text-[10px] font-title tracking-[1em] text-white/10 uppercase animate-pulse">Neural Synchronization Ready</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-      </div>
-
-      {/* Atmospheric Background Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
       </div>
     </div>
   );
