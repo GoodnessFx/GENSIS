@@ -30,11 +30,11 @@ const fragmentShader = `
     float gradient = 1.0 - distance(uv.y, 0.5 + noise);
     gradient = pow(gradient, 4.0);
 
-    float flow = sin(uv.x * 10.0 + uv.y * 5.0 + time) * 0.5 + 0.5;
-    float alpha = gradient * flow * 0.6;
+    float flow = sin(uv.x * 12.0 + uv.y * 6.0 + time) * 0.5 + 0.5;
+    float alpha = gradient * flow * 0.9;
     
-    vec3 color = mix(uColor, vec3(0.0, 0.8, 1.0), flow * 0.5);
-    color += vec3(0.1, 0.0, 0.2) * (1.0 - flow);
+    vec3 color = mix(uColor, vec3(0.0, 1.0, 0.9), flow * 0.6);
+    color += vec3(0.3, 0.0, 0.6) * (1.0 - flow);
     
     gl_FragColor = vec4(color, alpha * clamp(sin(time * 0.2) * 0.5 + 0.5, 0.4, 1.0));
   }

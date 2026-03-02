@@ -8,7 +8,7 @@ interface Repo {
   commits: number;
   date: string;
   abandoned: boolean;
-  code?: string;
+  codeSnippet?: string;
 }
 
 interface ExperienceState {
@@ -21,6 +21,8 @@ interface ExperienceState {
   spotifyData: any | null;
   currentYear: number;
   milestones: string[];
+  githubUser: string | null;
+  spotifyUser: string | null;
   
   setStarted: (started: boolean) => void;
   setPlaying: (playing: boolean) => void;
@@ -31,6 +33,8 @@ interface ExperienceState {
   setSpotifyData: (data: any) => void;
   setCurrentYear: (year: number) => void;
   addMilestone: (milestone: string) => void;
+  setGithubUser: (user: string | null) => void;
+  setSpotifyUser: (user: string | null) => void;
 }
 
 export const useExperienceStore = create<ExperienceState>((set) => ({
@@ -43,6 +47,8 @@ export const useExperienceStore = create<ExperienceState>((set) => ({
   spotifyData: null,
   currentYear: new Date().getFullYear(),
   milestones: [],
+  githubUser: null,
+  spotifyUser: null,
 
   setStarted: (isStarted) => set({ isStarted }),
   setPlaying: (isPlaying) => set({ isPlaying }),
@@ -61,4 +67,6 @@ export const useExperienceStore = create<ExperienceState>((set) => ({
   addMilestone: (milestone) => set((state) => ({ 
     milestones: [...state.milestones.slice(-2), milestone] 
   })),
+  setGithubUser: (githubUser) => set({ githubUser }),
+  setSpotifyUser: (spotifyUser) => set({ spotifyUser }),
 }));

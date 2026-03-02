@@ -2,7 +2,7 @@
 
 import { Canvas } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
-import { Bloom, Vignette, ChromaticAberration, EffectComposer } from '@react-three/postprocessing';
+import { Bloom, Vignette, ChromaticAberration, EffectComposer, Noise, Scanline } from '@react-three/postprocessing';
 import { Suspense, useMemo, useEffect } from 'react';
 import * as THREE from 'three';
 import { useExperienceStore } from '@/store/useExperienceStore';
@@ -14,15 +14,15 @@ import { Aurora } from './Aurora';
 import { fetchGithubData } from '@/lib/githubService';
 
 const Scene = () => {
-  const { githubData, setGithubData, isStarted } = useExperienceStore();
+  const { githubData, setGithubData, isStarted, githubUser } = useExperienceStore();
 
   useEffect(() => {
-    if (isStarted && !githubData) {
-      fetchGithubData('GoodnessFx')
+    if (isStarted && !githubData && githubUser) {
+      fetchGithubData(githubUser)
         .then(data => setGithubData(data))
         .catch(err => console.error('Failed to load GitHub data:', err));
     }
-  }, [isStarted, githubData, setGithubData]);
+  }, [isStarted, githubData, setGithubData, githubUser]);
 
   return (
     <>
@@ -58,13 +58,15 @@ const Scene = () => {
       <EffectComposer>
         <Bloom 
           luminanceThreshold={1} 
-          intensity={1.5} 
+          intensity={2.0} 
           mipmapBlur 
-          radius={0.4}
+          radius={0.5}
         />
         <ChromaticAberration 
-          offset={new THREE.Vector2(0.002, 0.002)} 
+          offset={new THREE.Vector2(0.003, 0.003)} 
         />
+        <Scanline opacity={0.05} density={1.5} />
+        <Noise opacity={0.02} />
         <Vignette eskil={false} offset={0.3} darkness={0.9} />
       </EffectComposer>
     </>

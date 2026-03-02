@@ -15,29 +15,26 @@ interface MonumentProps {
     commits: number;
     date: string;
     abandoned: boolean;
-    code?: string;
+    codeSnippet?: string;
   };
   position: [number, number, number];
 }
 
-const CodeScroll = ({ height, width }: { height: number; width: number }) => {
+const CodeScroll = ({ height, width, codeSnippet }: { height: number; width: number; codeSnippet?: string }) => {
   const textRef = useRef<THREE.Group>(null);
-  const codeLines = useMemo(() => [
-    'function genesis() {',
-    '  const history = fetchGithub();',
-    '  const music = fetchSpotify();',
-    '  return history.map(h => ({',
-    '    ...h,',
-    '    track: music.match(h.date)',
-    '  }));',
-    '}',
-    '// Committing to eternity...',
-    'import { Universe } from "life";',
-    'const me = new Developer();',
-    'me.code().then(world => {',
-    '  world.render("3D");',
-    '});',
-  ], []);
+  const codeLines = useMemo(() => {
+    if (codeSnippet) return codeSnippet.split('\n');
+    return [
+      'function genesis() {',
+      '  const history = fetchGithub();',
+      '  const music = fetchSpotify();',
+      '  return history.map(h => ({',
+      '    ...h,',
+      '    track: music.match(h.date)',
+      '  }));',
+      '}',
+    ];
+  }, [codeSnippet]);
 
   const fontUrl = "https://fonts.gstatic.com/s/robotomono/v22/L0tkDFo6GF1D6C1KnS7dfRLXv5b2Eg.ttf";
 
@@ -108,9 +105,15 @@ export const Monument = ({ repo, position }: MonumentProps) => {
 
   useFrame((state, delta) => {
     if (isBuilding || isBuilt) {
-      setScale(s => Math.min(1, s + delta * 2));
+      setScale(s => THREE.MathUtils.lerp(s, 1, delta * 2.5));
     } else {
-      setScale(s => Math.max(0, s - delta * 2));
+      setScale(s => THREE.MathUtils.lerp(s, 0, delta * 3.5));
+    }
+    
+    if (meshRef.current && (isBuilding || isBuilt)) {
+      // Subtle float and rotation
+      meshRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.2;
+      meshRef.current.rotation.y += delta * 0.1;
     }
   });
 
@@ -165,7 +168,6 @@ export const Monument = ({ repo, position }: MonumentProps) => {
               emissive={languageStyle.color}
               emissiveIntensity={repo.stars > 100 ? 2 : 0.5}
             />
-            <CodeScroll height={height} width={width} />
           </mesh>
         )}
         
@@ -201,6 +203,11 @@ export const Monument = ({ repo, position }: MonumentProps) => {
             <boxGeometry args={[width, height, width]} />
             <meshStandardMaterial color={languageStyle.color} />
           </mesh>
+        )}
+
+        {/* Floating Code Hologram for all types */}
+        {(isBuilding || isBuilt) && (
+          <CodeScroll height={height} width={width} codeSnippet={repo.codeSnippet} />
         )}
 
         {/* Repo Name */}

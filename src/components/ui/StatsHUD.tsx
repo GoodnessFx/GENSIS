@@ -32,8 +32,8 @@ export const StatsHUD = () => {
           animate={{ opacity: 1, x: 0 }}
           className="space-y-2"
         >
-          <span className="text-[11px] uppercase tracking-[0.6em] text-white/20 font-bold block">Temporal Log</span>
-          <h2 className="text-4xl text-white font-extralight tracking-tighter leading-none glow-text">{dateString}</h2>
+          <span className="text-[11px] uppercase tracking-[1em] text-white/40 font-bold block">Temporal Log</span>
+          <h2 className="text-6xl text-white font-extralight tracking-tighter leading-none glow-text">{dateString}</h2>
         </motion.div>
       </div>
 
@@ -43,13 +43,13 @@ export const StatsHUD = () => {
           {currentRepo && (
             <motion.div
               key={currentRepo.id}
-              initial={{ opacity: 0, scale: 0.8, filter: 'blur(20px)' }}
+              initial={{ opacity: 0, scale: 0.8, filter: 'blur(30px)' }}
               animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, scale: 1.2, filter: 'blur(40px)' }}
-              transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+              exit={{ opacity: 0, scale: 1.2, filter: 'blur(60px)' }}
+              transition={{ duration: 3, ease: [0.16, 1, 0.3, 1] }}
               className="text-center"
             >
-              <h3 className="text-[8rem] md:text-[12rem] font-bold tracking-[-0.05em] text-white/5 mix-blend-overlay uppercase leading-none font-accent italic">
+              <h3 className="text-[10rem] md:text-[16rem] font-bold tracking-[-0.08em] text-white/5 mix-blend-overlay uppercase leading-none font-accent italic">
                 {currentRepo.name}
               </h3>
             </motion.div>

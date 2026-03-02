@@ -3,6 +3,7 @@
 import Experience from '@/components/canvas/Experience';
 import { useExperienceStore } from '@/store/useExperienceStore';
 import { usePlayback } from '@/hooks/usePlayback';
+import { useAudio } from '@/hooks/useAudio';
 import { HeroOverlay } from '@/components/ui/HeroOverlay';
 import { ExperienceOverlay } from '@/components/ui/ExperienceOverlay';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
@@ -10,6 +11,7 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 export default function Home() {
   const { isStarted } = useExperienceStore();
   usePlayback();
+  useAudio();
 
   return (
     <main className="relative w-full h-screen overflow-hidden bg-black text-white font-sans">

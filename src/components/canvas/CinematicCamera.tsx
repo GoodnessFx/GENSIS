@@ -37,18 +37,21 @@ export const CinematicCamera = () => {
         
         // Cinematic drone movement
         const time = state.clock.getElapsedTime();
-        const hoverX = Math.sin(time * 0.2) * 5;
-        const hoverY = 10 + Math.cos(time * 0.3) * 2;
-        const hoverZ = repoPos.z + 25 + Math.sin(time * 0.1) * 5;
+        const hoverX = Math.sin(time * 0.3) * 8;
+        const hoverY = 12 + Math.cos(time * 0.4) * 3;
+        const hoverZ = repoPos.z + 30 + Math.sin(time * 0.2) * 8;
 
         targetPos.current.set(repoPos.x + hoverX, hoverY, hoverZ);
-        targetLookAt.current.lerp(repoPos, delta * 2);
+        targetLookAt.current.lerp(repoPos.clone().add(new THREE.Vector3(0, 2, 0)), delta * 2.5);
       }
     }
 
     // Smoothly interpolate camera position and lookAt
-    cameraRef.current.position.lerp(targetPos.current, delta * 1.5);
+    cameraRef.current.position.lerp(targetPos.current, delta * 2.0);
     cameraRef.current.lookAt(targetLookAt.current);
+    
+    // Add subtle camera roll
+    cameraRef.current.rotation.z = Math.sin(state.clock.getElapsedTime() * 0.2) * 0.05;
   });
 
   return (

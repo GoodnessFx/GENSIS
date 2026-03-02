@@ -3,26 +3,18 @@
 import { useExperienceStore } from '@/store/useExperienceStore';
 import { Music, Volume2, Radio } from 'lucide-react';
 import { useMemo, useEffect, useState } from 'react';
-import { getTrackForRepo, SpotifyTrack } from '@/lib/spotifyService';
+import { useAudio } from '@/hooks/useAudio';
 
 export const SpotifyPlayer = () => {
   const { githubData, progress, isStarted } = useExperienceStore();
-  const [currentTrack, setCurrentTrack] = useState<SpotifyTrack | null>(null);
+  const { currentTrack } = useAudio();
   const [isLive, setIsLive] = useState(false);
 
   useEffect(() => {
-    if (!githubData || !isStarted) return;
-    
-    const index = Math.floor(progress * githubData.length);
-    const repo = githubData[Math.min(index, githubData.length - 1)];
-    
-    // In a production app, we would cache these to avoid flickering
-    getTrackForRepo(repo).then(track => {
-      setCurrentTrack(track);
-      // If the track is from the repo era, we consider it "Live" (mock logic)
+    if (currentTrack) {
       setIsLive(true); 
-    });
-  }, [githubData, progress, isStarted]);
+    }
+  }, [currentTrack]);
 
   if (!currentTrack) return null;
 

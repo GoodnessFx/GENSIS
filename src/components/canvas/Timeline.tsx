@@ -37,6 +37,12 @@ export const Timeline = () => {
       
       {/* Secondary subtle grid */}
       <gridHelper args={[2000, 50, '#111111', 'transparent']} position={[0, -0.05, 0]} />
+
+      {/* Glowing center line */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]}>
+        <planeGeometry args={[0.2, 2000]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.1} />
+      </mesh>
     </group>
   );
 };
