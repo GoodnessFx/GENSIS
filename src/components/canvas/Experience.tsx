@@ -55,18 +55,15 @@ const Scene = () => {
       <CinematicCamera />
 
       {/* Post Processing */}
-      <EffectComposer>
+      <EffectComposer disableNormalPass>
         <Bloom 
           luminanceThreshold={1} 
-          intensity={2.0} 
+          intensity={1.5} 
           mipmapBlur 
-          radius={0.5}
         />
         <ChromaticAberration 
-          offset={new THREE.Vector2(0.003, 0.003)} 
+          offset={new THREE.Vector2(0.002, 0.002)} 
         />
-        <Scanline opacity={0.05} density={1.5} />
-        <Noise opacity={0.02} />
         <Vignette eskil={false} offset={0.3} darkness={0.9} />
       </EffectComposer>
     </>

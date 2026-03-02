@@ -13,30 +13,28 @@ const vertexShader = `
 `;
 
 const fragmentShader = `
-  precision highp float;
+  precision mediump float;
   uniform float uTime;
   uniform vec3 uColor;
   varying vec2 vUv;
 
   void main() {
-    // Advanced aurora math
     vec2 uv = vUv;
     float time = uTime * 0.5;
     
-    float noise = sin(uv.x * 12.0 + time) * 0.1;
-    noise += sin(uv.x * 24.0 - time * 0.8) * 0.05;
-    noise += sin(uv.y * 8.0 + time * 1.2) * 0.02;
+    // Simplified noise for stability
+    float noise = sin(uv.x * 10.0 + time) * 0.1;
+    noise += sin(uv.x * 20.0 - time * 0.5) * 0.05;
 
     float gradient = 1.0 - distance(uv.y, 0.5 + noise);
-    gradient = pow(gradient, 4.0);
+    gradient = pow(max(gradient, 0.0), 3.0);
 
-    float flow = sin(uv.x * 12.0 + uv.y * 6.0 + time) * 0.5 + 0.5;
-    float alpha = gradient * flow * 0.9;
+    float flow = sin(uv.x * 10.0 + uv.y * 5.0 + time) * 0.5 + 0.5;
+    float alpha = gradient * flow;
     
-    vec3 color = mix(uColor, vec3(0.0, 1.0, 0.9), flow * 0.6);
-    color += vec3(0.3, 0.0, 0.6) * (1.0 - flow);
+    vec3 color = mix(uColor, vec3(0.0, 0.8, 1.0), flow);
     
-    gl_FragColor = vec4(color, alpha * clamp(sin(time * 0.2) * 0.5 + 0.5, 0.4, 1.0));
+    gl_FragColor = vec4(color, alpha * 0.8);
   }
 `;
 
