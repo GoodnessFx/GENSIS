@@ -1,12 +1,17 @@
 'use client';
 
-import Experience from '@/components/canvas/Experience';
+import dynamic from 'next/dynamic';
 import { useExperienceStore } from '@/store/useExperienceStore';
 import { usePlayback } from '@/hooks/usePlayback';
 import { useAudio } from '@/hooks/useAudio';
 import { HeroOverlay } from '@/components/ui/HeroOverlay';
 import { ExperienceOverlay } from '@/components/ui/ExperienceOverlay';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+
+const Experience = dynamic(() => import('@/components/canvas/Experience'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function Home() {
   const { isStarted } = useExperienceStore();

@@ -11,6 +11,8 @@ interface Repo {
   codeSnippet?: string;
 }
 
+import type { SpotifyTrack } from '@/lib/spotifyService';
+
 interface ExperienceState {
   isStarted: boolean;
   isPlaying: boolean;
@@ -18,7 +20,7 @@ interface ExperienceState {
   progress: number;
   playbackSpeed: number;
   githubData: Repo[] | null;
-  spotifyData: any | null;
+  spotifyData: SpotifyTrack[] | null;
   currentYear: number;
   milestones: string[];
   githubUser: string | null;
@@ -30,7 +32,7 @@ interface ExperienceState {
   setProgress: (progress: number) => void;
   setPlaybackSpeed: (speed: number) => void;
   setGithubData: (data: Repo[]) => void;
-  setSpotifyData: (data: any) => void;
+  setSpotifyData: (data: SpotifyTrack[]) => void;
   setCurrentYear: (year: number) => void;
   addMilestone: (milestone: string) => void;
   setGithubUser: (user: string | null) => void;

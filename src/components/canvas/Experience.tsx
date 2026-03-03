@@ -55,7 +55,7 @@ const Scene = () => {
       <CinematicCamera />
 
       {/* Post Processing */}
-      <EffectComposer disableNormalPass>
+      <EffectComposer>
         <Bloom 
           luminanceThreshold={1} 
           intensity={1.5} 

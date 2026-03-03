@@ -9,7 +9,7 @@ import gsap from 'gsap';
 
 export const CinematicCamera = () => {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
-  const { isPlaying, progress, githubData, isEnding } = useExperienceStore();
+  const { isPlaying, progress, githubData, isEnding, playbackSpeed } = useExperienceStore();
   
   // Target position and lookAt
   const targetPos = useRef(new THREE.Vector3(0, 10, 30));

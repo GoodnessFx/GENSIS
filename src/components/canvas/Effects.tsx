@@ -12,15 +12,19 @@ export const StarStrike = ({ position }: { position: [number, number, number] })
     const count = 100;
     const positions = new Float32Array(count * 3);
     const velocities = new Float32Array(count * 3);
+    const rand = (seed: number) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
     
     for (let i = 0; i < count; i++) {
       positions[i * 3] = position[0];
       positions[i * 3 + 1] = position[1] + 10;
       positions[i * 3 + 2] = position[2];
       
-      velocities[i * 3] = (Math.random() - 0.5) * 0.1;
-      velocities[i * 3 + 1] = -Math.random() * 0.2;
-      velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
+      velocities[i * 3] = (rand(i * 1.23) - 0.5) * 0.1;
+      velocities[i * 3 + 1] = -rand(i * 2.17) * 0.2;
+      velocities[i * 3 + 2] = (rand(i * 3.07) - 0.5) * 0.1;
     }
     return { positions, velocities };
   }, [position]);

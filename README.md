@@ -27,9 +27,29 @@
 
 ## 🛠️ Tech Stack & Architecture
 
-- **Frontend**: Next.js (App Router), Three.js, React Three Fiber, GSAP, Framer Motion, Tone.js, Tailwind CSS.
-- **State Management**: Zustand (Centralized experience state).
-- **Architecture**: Decoupled UI overlays from the 3D Canvas engine for high performance.
+- Frontend: Next.js (App Router), Three.js, React Three Fiber, GSAP, Framer Motion, Tone.js, Tailwind CSS.
+- State: Zustand (centralized experience state).
+- Auth: NextAuth (GitHub + Spotify), Supabase OAuth for X (Twitter).
+- Data: Supabase (Postgres + pgvector), optional Upstash Redis cache.
+- Architecture: UI overlays fully decoupled from the 3D canvas. Heavy 3D code dynamically imported to minimize initial JS.
+
+### Architecture Diagram (Mermaid)
+```mermaid
+flowchart TD
+  A[Client UI] -->|Zustand| B[Experience State]
+  A --> C[Hero Overlay]
+  A --> D[Experience Overlay]
+  A -->|dynamic import| E[3D Scene (R3F)]
+  E --> F[Repo Monuments]
+  E --> G[Postprocessing]
+  A --> H[Auth Buttons]
+  H --> I[NextAuth (GitHub/Spotify)]
+  H --> J[Supabase OAuth (X)]
+  I --> K[/api/github/*, /api/spotify/*]
+  J --> L[/api/supabase/profile/init]
+  M[/api/x/bookmarks] --> N[/api/x/ingest] --> O[(Supabase: items)]
+  P[/api/settings/export] & Q[/api/settings/delete] --> O
+```
 
 *Note: The architecture diagram in previous versions included high-level infrastructure (Redis/Bull) which is part of the future scalable backend; currently, the app runs as a performant standalone Next.js application.*
 
@@ -55,6 +75,26 @@
    ```bash
    npm run dev
    ```
+
+4. Analyze bundle (optional):
+   ```bash
+   npm run analyze
+   ```
+
+### Environment
+Copy `.env.example` to `.env.local` and fill:
+- GitHub/Spotify (NextAuth), Supabase (public + service role), X/Twitter bearer token, CRON secret, Redis (optional)
+
+### Performance Blueprint
+- App Router with dynamic imports for heavy 3D: `src/app/page.tsx` dynamically loads the scene to reduce initial JS.
+- Avoid impure work in render; lint/typecheck clean.
+- Image optimization via Next; Tailwind v4 with JIT.
+- Analyzer ready: `npm run analyze` to inspect bundle and remove bloat.
+- Prefer server routes for data; cache with Redis (optional) or route revalidation.
+- Use Edge/cron where suitable for auth/rate-limit and background work.
+
+### Supabase Schema
+Run the SQL in `docs/schema.sql` inside Supabase. RLS policies are included for owner-only access. pgvector index hints are provided for fast semantic search.
 
 
 

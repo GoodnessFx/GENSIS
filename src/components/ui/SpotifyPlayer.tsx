@@ -2,19 +2,16 @@
 
 import { useExperienceStore } from '@/store/useExperienceStore';
 import { Music, Volume2, Radio } from 'lucide-react';
-import { useMemo, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useAudio } from '@/hooks/useAudio';
 
 export const SpotifyPlayer = () => {
-  const { githubData, progress, isStarted } = useExperienceStore();
   const { currentTrack } = useAudio();
-  const [isLive, setIsLive] = useState(false);
-
-  useEffect(() => {
-    if (currentTrack) {
-      setIsLive(true); 
-    }
-  }, [currentTrack]);
+  const isLive = !!currentTrack;
+  const bars = useMemo(() => {
+    const base = currentTrack?.bpm || 120;
+    return [0, 1, 2, 3].map(i => ((base * (i + 1)) % 100) / 1.5 + 20);
+  }, [currentTrack?.bpm]);
 
   if (!currentTrack) return null;
 
@@ -23,15 +20,14 @@ export const SpotifyPlayer = () => {
       <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex items-center gap-4 animate-in slide-in-from-right duration-500">
         <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center relative overflow-hidden group">
           {isLive ? <Radio className="w-6 h-6 text-green-500" /> : <Music className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />}
-          {/* Simulated Visualizer Bars */}
           <div className="absolute bottom-0 left-0 w-full flex items-end justify-center gap-0.5 px-1 h-4">
-            {[1, 2, 3, 4].map((i) => (
+            {[0, 1, 2, 3].map((i) => (
               <div 
                 key={i} 
                 className="w-1 bg-green-500 animate-pulse" 
                 style={{ 
-                  height: `${Math.random() * 100}%`,
-                  animationDelay: `${i * 0.2}s`
+                  height: `${bars[i]}%`,
+                  animationDelay: `${(i + 1) * 0.2}s`
                 }} 
               />
             ))}

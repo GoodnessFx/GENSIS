@@ -23,24 +23,13 @@ const LIKED_SONGS_FALLBACK: SpotifyTrack[] = [
 
 export const getTrackForRepo = async (repo: Repo): Promise<SpotifyTrack> => {
   try {
-    // 1. Try to fetch from Spotify API (Placeholder for real implementation)
-    // const response = await fetch(`/api/spotify/match?date=${repo.date}`);
-    // if (response.ok) return await response.json();
+    const stored = typeof window !== 'undefined' ? localStorage.getItem('spotify_liked_tracks') : null;
+    const liked: SpotifyTrack[] | null = stored ? JSON.parse(stored) : null;
 
-    // 2. Logic to "match" era or "liked songs" fallback
-    const repoYear = new Date(repo.date).getFullYear();
-    const currentYear = new Date().getFullYear();
-    
-    // If repo is from the past, try to find a song from that era
-    // For now, we use our fallback list and intelligently pick based on repo characteristics
-    const lang = repo.language?.toLowerCase() || 'other';
-    
-    // Deterministic selection based on repo name to keep it consistent for the same repo
     const charSum = repo.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const fallbackIndex = charSum % LIKED_SONGS_FALLBACK.length;
-    const baseTrack = LIKED_SONGS_FALLBACK[fallbackIndex];
+    const source = liked && liked.length > 0 ? liked : LIKED_SONGS_FALLBACK;
+    const baseTrack = source[charSum % source.length];
 
-    // Modify properties based on repo stats (Senior Dev level detail)
     const bpm = Math.min(180, Math.max(60, baseTrack.bpm + (repo.commits / 20)));
     
     return {
